@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.bukkit.Location;
 import java.util.HashMap;
+import java.util.Map;
 
 public class EasySpawnRedux extends JavaPlugin {
     private HashMap<World, Location> spawnLocations = new HashMap<World, Location>();
@@ -25,6 +26,24 @@ public class EasySpawnRedux extends JavaPlugin {
             float pitch = (float) getConfig().getDouble(format + ".pitch");
             Location loc = new Location(world, x, y, z, yaw, pitch);
             spawnLocations.put(world, loc);
+        }
+    }
+
+    public void saveConfig() {
+        for (Map.Entry<World, Location> entry : spawnLocations.entrySet()) {
+            String worldName = entry.getKey().getName();
+            double x = entry.getValue().getX();
+            double y = entry.getValue().getY();
+            double z = entry.getValue().getZ();
+            double yaw = entry.getValue().getYaw();
+            double pitch = entry.getValue().getPitch();
+            String format = "spawn." + worldName;
+
+            getConfig().set(format + ".x", x);
+            getConfig().set(format + ".y", y);
+            getConfig().set(format + ".z", z);
+            getConfig().set(format + ".yaw", yaw);
+            getConfig().set(format + ".pitch", pitch);
         }
     }
 }
