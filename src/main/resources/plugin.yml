@@ -1,0 +1,21 @@
+name: EasySpawn Redux
+author: DSPhat
+version: 1.12.1.1
+
+permissions:
+  easyspawnredux.spawn:
+    description: Grants access to the /spawn command.
+    default: true
+  easyspawnredux.setspawn:
+    description: Grants access to the /setspawn command.
+    default: op
+
+commands:
+  spawn:
+    description: Teleports you to the spawn of the world you're currently in.
+    permission: easyspawnredux.spawn
+    usage: /<command>
+  setspawn:
+    description: Sets the spawn of the world you're currently in.
+    permission: easyspawnredux.setspawn
+    usage: /<command>

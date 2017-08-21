@@ -1,8 +1,10 @@
 package net.dsphat.easyspawnredux;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.bukkit.Location;
@@ -23,6 +25,7 @@ public class EasySpawnRedux extends JavaPlugin {
     @Override
     public void onEnable() {
         loadConfig();
+        getLogger().info(getDescription().getName() + " v" + getDescription().getVersion() + " started successfully!");
     }
 
     public void loadConfig() {
@@ -59,8 +62,28 @@ public class EasySpawnRedux extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "You must be a player to do that!");
+            return false;
+        }
+
+        Player player = (Player)sender;
+
         if (cmd.getName().equalsIgnoreCase("spawn")) {
-            if (!(sender.hasPermission(cmd.getPermission()))) return false;
+            if (!spawnLocations.containsKey(player.getWorld())) {
+                player.teleport(player.getWorld().getSpawnLocation());
+            }
+            player.teleport(spawnLocations.get(player.getWorld()));
+            player.sendMessage(ChatColor.GOLD + "Teleporting...");
+        }
+
+        if (cmd.getName().equalsIgnoreCase("setspawn")) {
+            if (spawnLocations.containsKey(player.getWorld())) {
+                spawnLocations.remove(player.getWorld());
+            }
+            spawnLocations.put(player.getWorld(), player.getLocation());
+            saveConfig();
         }
         return true;
     }
